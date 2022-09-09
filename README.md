@@ -18,4 +18,3 @@ In this Repo I have covered beginner level examples of OpenCV and build a mini p
 
 ## A Cropping Tool mini project 
 
-....... Details will be Mentioned Soon..........
