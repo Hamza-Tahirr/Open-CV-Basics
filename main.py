@@ -1,20 +1,26 @@
+import sys
+
 import cv2
 import numpy as np
 
+path = sys.argv[1] if len(sys.argv) > 1 else "img/fruits.jpg"
+
 #Reading an image
-img = cv2.imread("img/fruits.jpg")
+img = cv2.imread(path)
+if img is None:
+    sys.exit(f"Could not read image: {path}")
 print(img.shape)
 
 
-# For showing an image 
+# For showing an image
 cv2.imshow('window',img)
-cv2.waitKey(0)  #this shows the pic will be there for infinite time untill u cross
+cv2.waitKey(0)  #the window stays open until a key is pressed
 
 
 #Converting color pics into greyscale
 img_grey = cv2.cvtColor(img,cv2.COLOR_BGR2GRAY)
 cv2.imshow('window',img_grey)
-cv2.waitKey(0) 
+cv2.waitKey(0)
 print(img_grey.shape)
 
 
@@ -27,24 +33,24 @@ imgRED= img[:,:,2]
 new_img = np.hstack((imgBLUE,imgGREEN,imgRED))
 
 cv2.imshow('window',new_img)
-cv2.waitKey(0) 
+cv2.waitKey(0)
 
 
 
 #Resizing the Image
-img = cv2.imread("img/fruits.jpg")
+img = cv2.imread(path)
 img_resize=cv2.resize(img,(500,500))
-for resizing to half 
+#for resizing to half
 img_resize=cv2.resize(img,(img.shape[1]//2,img.shape[0]//2))
-cv2.imshow("window",img)
+cv2.imshow("window",img_resize)
 cv2.waitKey(0)
 print(img_resize.shape)
 
 
-#Flipping the image 
-img = cv2.imread("img/fruits.jpg")
+#Flipping the image
+img = cv2.imread(path)
 img_flip=cv2.flip(img,0) #vertical flip
-img_flip=cv2.flip(img,1) #horiontal flip
+img_flip=cv2.flip(img,1) #horizontal flip
 img_flip1=cv2.flip(img,-1) #both horizontal and vertical
 cv2.imshow("window",img_flip1)
 cv2.waitKey(0)
@@ -52,23 +58,23 @@ cv2.waitKey(0)
 
 
 #Cropping An Image
-img = cv2.imread("img/fruits.jpg")
+img = cv2.imread(path)
 img_crop = img[100:300,200:500]
 cv2.imshow("window",img_crop)
 cv2.waitKey(0)
 
 
-#Saving an image 
-img = cv2.imread("img/fruits.jpg")
+#Saving an image
+img = cv2.imread(path)
 img_crop = img[100:300,200:500]
-cv2.imwrite('fruits_small.png',imp_crop)
+cv2.imwrite('fruits_small.png',img_crop)
 cv2.imshow("window",img_crop)
 cv2.waitKey(0)
 
 
-#Drawing Shapes 
+#Drawing Shapes
 ## creating own image
-img=np.zeros((512,512,3))
+img=np.zeros((512,512,3),dtype=np.uint8)
 ##For rectangle
 cv2.rectangle(img,pt1=(100,100),pt2=(300,300),color=(255,0,0),thickness=3)
 ##For Circle
@@ -87,22 +93,22 @@ cv2.waitKey(0)
 #EVENTS ---- CLICKS OR ANYTHING ELSE
 
 def draw(event,x,y,flags,params):
-    if event ==1: #mouse click  hwa
+    if event == cv2.EVENT_LBUTTONDOWN:
         cv2.circle(img,center=(x,y),radius=50,color=(0,0,255),thickness=-1)
-        
+
 cv2.namedWindow(winname='window')
 cv2.setMouseCallback('window',draw)
 
-img = np.zeros((512,512,3))
+img = np.zeros((512,512,3),dtype=np.uint8)
 
 while True:
     cv2.imshow('window',img)
-    if cv2.waitKey(1) & 0xFF== ord('x'): #x will break down our screen if we press x
+    if cv2.waitKey(1) & 0xFF== ord('x'): #press x to close the window
         break
 
 cv2.destroyAllWindows()
 
-##For making a rectangle while streching using 3 mouse events 
+##For making a rectangle while stretching using 3 mouse events
 flag =False
 ix=-1
 iy=-1
@@ -110,28 +116,27 @@ iy=-1
 def draw(event,x,y,flags,params):
     global flag,ix,iy
 
-    if event == 1: #mouse click  hwa
+    if event == cv2.EVENT_LBUTTONDOWN:
        flag = True
        ix=x
        iy=y
 
-    elif event == 0:
+    elif event == cv2.EVENT_MOUSEMOVE:
         if flag==True:
             cv2.rectangle(img,pt1=(ix,iy),pt2=(x,y),color=(0,0,255),thickness=-1)
 
-    elif event == 4:
-        flag=False 
+    elif event == cv2.EVENT_LBUTTONUP:
+        flag=False
         cv2.rectangle(img,pt1=(ix,iy),pt2=(x,y),color=(0,0,255),thickness=-1)
 
 cv2.namedWindow(winname='window')
 cv2.setMouseCallback('window',draw)
 
-img = np.zeros((512,512,3))
+img = np.zeros((512,512,3),dtype=np.uint8)
 
 while True:
     cv2.imshow('window',img)
-    if cv2.waitKey(1) & 0xFF== ord('x'): #x will break down our screen if we press x
+    if cv2.waitKey(1) & 0xFF== ord('x'): #press x to close the window
         break
 
 cv2.destroyAllWindows()
-
